@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - ecommerce-data:/data/db
+
+volumes:
+  ecommerce-data:
