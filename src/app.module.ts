@@ -1,32 +1,38 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { ConfigModule } from '@nestjs/config';
+import { GraphQLError, GraphQLFormattedError } from 'graphql/error';
+
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
-import { MongooseModule } from '@nestjs/mongoose';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { DatabaseModule } from "./common/database/database.module";
+import { DatabaseModule } from './common/database/database.module';
+import { CategoryModule } from './category/category.module';
+import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: true,
+      formatError: (error: GraphQLError) => {
+        const graphQLFormattedError: GraphQLFormattedError = {
+          message: error?.message,
+          extensions: {
+            errors: error.extensions.originalError,
+          },
+        };
+        return graphQLFormattedError;
+      },
     }),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    // MongooseModule.forRootAsync({
-    //   inject: [ConfigService],
-    //   useFactory: (configService: ConfigService) => {
-    //     return {
-    //       uri: configService.get('MONGODB_URI'),
-    //     };
-    //   },
-    // }),
     DatabaseModule,
     AuthModule,
     UserModule,
+    CategoryModule,
+    ProductModule,
   ],
   controllers: [],
   providers: [],
