@@ -3,6 +3,8 @@ import { ProductRepository } from './product.repository';
 import { CreateProductInput } from './dtos/inputs/create-product.input';
 import { CategoryService } from '../category/category.service';
 import { Product } from './schemas/product.schema';
+import { UpdateProductInput } from './dtos/inputs/update-product.input';
+import { IUpdateProduct } from './interfaces/update-product.interface';
 
 @Injectable()
 export class ProductService {
@@ -32,5 +34,36 @@ export class ProductService {
       ...createProductInput,
       category,
     });
+  }
+
+  async update(
+    id: string,
+    updateProductInput: Omit<UpdateProductInput, 'productId'>,
+  ): Promise<Product> {
+    await this.findById(id);
+
+    const updateProduct: IUpdateProduct = {};
+
+    if (updateProductInput.category) {
+      updateProduct.category = await this.categoryService.findById(
+        updateProductInput.category,
+      );
+      delete updateProductInput.category;
+    }
+
+    return this.productRepository.findOneAndUpdate(
+      {
+        _id: id,
+      },
+      {
+        ...updateProduct,
+        ...updateProductInput,
+      },
+    );
+  }
+
+  async delete(id: string) {
+    await this.findById(id);
+    return this.productRepository.findOneAndDelete({ _id: id });
   }
 }
