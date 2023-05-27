@@ -1,5 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { Role } from '../../../auth/enums/role.enum';
+import { Validate } from 'class-validator';
+import { UserEmailExistsValidator } from '../../../common/validators';
 
 @InputType()
 export class CreateUserInput {
@@ -9,7 +10,8 @@ export class CreateUserInput {
   @Field()
   lastname: string;
 
-  @Field()
+  // @Validate(UserEmailExistsValidator)
+  @Field(() => String)
   email: string;
 
   @Field()

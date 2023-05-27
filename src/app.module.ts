@@ -9,6 +9,8 @@ import { UserModule } from './user/user.module';
 import { DatabaseModule } from './common/database/database.module';
 import { CategoryModule } from './category/category.module';
 import { ProductModule } from './product/product.module';
+import { UserEmailExistsValidator } from "./common/validators";
+import { ShoppingCartModule } from './shopping-cart/shopping-cart.module';
 
 @Module({
   imports: [
@@ -33,6 +35,7 @@ import { ProductModule } from './product/product.module';
     UserModule,
     CategoryModule,
     ProductModule,
+    ShoppingCartModule,
   ],
   controllers: [],
   providers: [],

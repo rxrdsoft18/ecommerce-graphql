@@ -4,7 +4,7 @@ import { ProductService } from './product.service';
 import { DatabaseModule } from '../common/database/database.module';
 import { Product, ProductSchema } from './schemas/product.schema';
 import { ProductRepository } from './product.repository';
-import { CategoryModule } from "../category/category.module";
+import { CategoryModule } from '../category/category.module';
 
 @Module({
   imports: [
@@ -17,5 +17,6 @@ import { CategoryModule } from "../category/category.module";
     CategoryModule,
   ],
   providers: [ProductResolver, ProductService, ProductRepository],
+  exports: [ProductService],
 })
 export class ProductModule {}

@@ -2,10 +2,9 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 
 import { Product } from './dtos/object-types/product.type';
-import { CreateProductInput } from './dtos/inputs/create-product.input';
 import { ProductService } from './product.service';
 import { JwtCustomGuard } from '../auth/guards/jwt-custom.guard';
-import { UpdateProductInput } from "./dtos/inputs/update-product.input";
+import { UpdateProductInput, CreateProductInput } from './dtos/inputs';
 
 @UseGuards(JwtCustomGuard)
 @Resolver()
