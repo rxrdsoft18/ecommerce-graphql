@@ -13,16 +13,35 @@ import { TokenPayload } from '../auth/interfaces/token-payload.interface';
 export class ShoppingCartResolver {
   constructor(private readonly shoppingCartService: ShoppingCartService) {}
 
-  @Mutation(() => ShoppingCart)
-  addProductToCart(
-    @Args('addProductInput') addProductInput: AddProductInput,
-    @CurrentUser() user: TokenPayload,
-  ) {
-    return this.shoppingCartService.addProductToCart(addProductInput, user);
-  }
-
   @Query(() => ShoppingCart)
   getShoppingCartById(@Args('id') id: string) {
     return this.shoppingCartService.getShoppingCartById(id);
+  }
+
+  @Mutation(() => ShoppingCart)
+  addProductToShoppingCart(
+    @Args('addProductInput') addProductInput: AddProductInput,
+    @CurrentUser() user: TokenPayload,
+  ) {
+    return this.shoppingCartService.addProductToShoppingCart(
+      addProductInput,
+      user,
+    );
+  }
+
+  @Mutation(() => ShoppingCart)
+  removeProductOfShoppingCart(
+    @Args('productId') productId: string,
+    @CurrentUser() user: TokenPayload,
+  ) {
+    return this.shoppingCartService.removeProductOfShoppingCart(
+      productId,
+      user,
+    );
+  }
+
+  @Mutation(() => ShoppingCart)
+  deleteShoppingCart(@CurrentUser() user: TokenPayload) {
+    return this.shoppingCartService.deleteShoppingCart(user);
   }
 }

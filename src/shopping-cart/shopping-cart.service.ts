@@ -42,7 +42,10 @@ export class ShoppingCartService {
     );
   }
 
-  async addProductToCart(addProductInput: AddProductInput, user: TokenPayload) {
+  async addProductToShoppingCart(
+    addProductInput: AddProductInput,
+    user: TokenPayload,
+  ) {
     const { userId } = user;
     const { productId, quantity } = addProductInput;
 
@@ -107,5 +110,42 @@ export class ShoppingCartService {
       throw new NotFoundException(`ShoppingCart with ID: ${id} not found`);
     }
     return shoppingCart;
+  }
+
+  async deleteShoppingCart(user: TokenPayload) {
+    return this.shoppingCartRepository.findOneAndDelete({
+      userId: user.userId,
+    });
+  }
+
+  async removeProductOfShoppingCart(
+    productId: string,
+    user: TokenPayload,
+  ): Promise<ShoppingCart> {
+    const shoppingCart = await this.getShoppingCartByUserId(user.userId);
+
+    if (!shoppingCart) {
+      throw new NotFoundException('ShoppingCart not found');
+    }
+
+    const indexOfItem = shoppingCart.items.findIndex(
+      (itemCart) => itemCart.productId === productId,
+    );
+
+    if (indexOfItem === -1) {
+      throw new NotFoundException(
+        `ProductId: ${productId} not found in shoppingCart`,
+      );
+    }
+
+    shoppingCart.items.splice(indexOfItem, 1);
+    shoppingCart.totalPrice = await this.recalculateTotalPrice(shoppingCart);
+
+    return this.shoppingCartRepository.findOneAndUpdate(
+      {
+        _id: shoppingCart._id,
+      },
+      shoppingCart,
+    );
   }
 }

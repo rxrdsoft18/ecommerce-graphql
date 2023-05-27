@@ -11,6 +11,7 @@ import { CategoryModule } from './category/category.module';
 import { ProductModule } from './product/product.module';
 import { UserEmailExistsValidator } from "./common/validators";
 import { ShoppingCartModule } from './shopping-cart/shopping-cart.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { ShoppingCartModule } from './shopping-cart/shopping-cart.module';
     CategoryModule,
     ProductModule,
     ShoppingCartModule,
+    OrderModule,
   ],
   controllers: [],
   providers: [],
