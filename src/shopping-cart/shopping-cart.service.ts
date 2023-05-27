@@ -16,7 +16,7 @@ export class ShoppingCartService {
     private readonly productService: ProductService,
   ) {}
 
-  private async getShoppingCartByUserId(userId: string): Promise<ShoppingCart> {
+  async getShoppingCartByUserId(userId: string): Promise<ShoppingCart> {
     return this.shoppingCartRepository.findOne({
       userId,
     });

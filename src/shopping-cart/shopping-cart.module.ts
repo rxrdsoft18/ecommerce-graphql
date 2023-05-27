@@ -21,5 +21,6 @@ import { ProductModule } from '../product/product.module';
     ShoppingCartResolver,
     ShoppingCartRepository,
   ],
+  exports: [ShoppingCartService],
 })
 export class ShoppingCartModule {}
