@@ -2,6 +2,10 @@ import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class OrderItem {
+
+  @Field()
+  _id: string;
+
   @Field()
   name: string;
 
@@ -13,4 +17,7 @@ export class OrderItem {
 
   @Field()
   image: string;
+
+  @Field()
+  productId: string;
 }

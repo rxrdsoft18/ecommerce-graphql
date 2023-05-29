@@ -1,4 +1,4 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 
 import { Order } from './dtos/object-types';
@@ -19,5 +19,10 @@ export class OrderResolver {
     @CurrentUser() user: TokenPayload,
   ) {
     return this.orderService.createOrder(createOrderInput, user);
+  }
+
+  @Query(() => Order)
+  getOrderById(@Args('id') id: string) {
+    return this.orderService.findById(id);
   }
 }

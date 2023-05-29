@@ -35,7 +35,8 @@ export class Order extends AbstractIdDocumentSchema {
   @Prop({ type: Types.ObjectId, ref: User.name, required: true })
   user: User;
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: OrderItem.name }] })
+  // @Prop({ type: [{ type: Types.ObjectId, ref: OrderItem.name }] })
+  @Prop()
   orderItems: OrderItem[];
 
   @Prop({ type: Types.ObjectId, ref: ShippingAddress.name })

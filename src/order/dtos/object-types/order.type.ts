@@ -8,8 +8,8 @@ export class Order {
   @Field()
   _id: string;
 
-  @Field()
-  paymentMethod: string;
+  // @Field()
+  // paymentMethod: string;
 
   @Field()
   shippingPrice: number;

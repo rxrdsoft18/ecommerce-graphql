@@ -1,11 +1,13 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException } from "@nestjs/common";
 
-import { CreateOrderInput } from './dtos/inputs/create-order.input';
-import { OrderRepository } from './order.repository';
-import { TokenPayload } from '../auth/interfaces/token-payload.interface';
-import { ShoppingCartService } from '../shopping-cart/shopping-cart.service';
-import { UserService } from '../user/user.service';
-import { ShippingAddressRepository } from './shipping-address.repository';
+import { CreateOrderInput } from "./dtos/inputs/create-order.input";
+import { OrderRepository } from "./order.repository";
+import { TokenPayload } from "../auth/interfaces/token-payload.interface";
+import { ShoppingCartService } from "../shopping-cart/shopping-cart.service";
+import { UserService } from "../user/user.service";
+import { ShippingAddressRepository } from "./shipping-address.repository";
+import { ShoppingCart } from "../shopping-cart/schemas";
+import { Types } from "mongoose";
 
 @Injectable()
 export class OrderService {
@@ -16,6 +18,16 @@ export class OrderService {
     private readonly userService: UserService,
     private readonly shippingAddressRepository: ShippingAddressRepository,
   ) {}
+
+  async findById(id: string) {
+    const order = await this.orderRepository.findOne({ _id: id });
+
+    if (!order) {
+      throw new NotFoundException(`Order with ID: ${id} not found`);
+    }
+
+    return order;
+  }
 
   async createOrder(createOrderInput: CreateOrderInput, user: TokenPayload) {
     const { userId, email } = user;
@@ -31,11 +43,16 @@ export class OrderService {
     }
     const userExists = await this.userService.findByEmail(email);
 
+    console.log(shoppingCart.items);
+
+    console.log(this.getShoppingCartItemWithObjectId(shoppingCart));
+
+
     const addressCreated = await this.shippingAddressRepository.create(
       shippingAddress,
     );
 
-    return this.orderRepository.create({
+    return await this.orderRepository.create({
       shippingPrice: 10,
       totalPrice: shoppingCart.totalPrice,
       isPaid: true,
@@ -43,8 +60,15 @@ export class OrderService {
       isDelivered: false,
       deliveredAt: null,
       user: userExists,
-      orderItems: shoppingCart.items,
+      orderItems: this.getShoppingCartItemWithObjectId(shoppingCart),
       shippingAddress: addressCreated,
     });
+  }
+
+  private getShoppingCartItemWithObjectId(shoppingCart: ShoppingCart) {
+    return shoppingCart.items.map((item) => ({
+      ...item,
+      _id: new Types.ObjectId(),
+    }));
   }
 }
