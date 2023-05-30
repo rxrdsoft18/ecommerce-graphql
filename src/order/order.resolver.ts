@@ -22,7 +22,12 @@ export class OrderResolver {
   }
 
   @Query(() => Order)
-  getOrderById(@Args('id') id: string) {
+  getOrderById(@Args('id') id: string, @CurrentUser() user: TokenPayload) {
     return this.orderService.findById(id);
+  }
+
+  @Query(() => [Order], { name: 'orders' })
+  getMyOrderByUserId(@CurrentUser() user: TokenPayload) {
+    return this.orderService.getMyOrderByUserId(user.userId);
   }
 }

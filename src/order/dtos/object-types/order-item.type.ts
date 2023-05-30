@@ -16,6 +16,9 @@ export class OrderItem {
   price: number;
 
   @Field()
+  subTotalPrice: number;
+
+  @Field()
   image: string;
 
   @Field()

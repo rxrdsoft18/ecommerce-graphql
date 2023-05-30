@@ -1,9 +1,12 @@
-import { AbstractIdDocumentSchema } from '../../common/repositories/base/abstract-id.document.schema';
-import { Prop, Schema } from '@nestjs/mongoose';
-import { User } from '../../user/user.schema';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
 
+import { User } from '../../user/user.schema';
+import { AbstractIdDocumentSchema } from '../../common/repositories';
+import { Product } from './product.schema';
+
 @Schema({ versionKey: false, collection: 'reviews', timestamps: true })
+
 export class Review extends AbstractIdDocumentSchema {
   @Prop({ type: String, required: true })
   reviewerName: string;
@@ -15,5 +18,10 @@ export class Review extends AbstractIdDocumentSchema {
   comment: string;
 
   @Prop({ type: Types.ObjectId, ref: User.name })
-  user: User;
+  userId: string;
+
+  @Prop({ type: Types.ObjectId, ref: 'Product' })
+  productId: string;
 }
+
+export const ReviewSchema = SchemaFactory.createForClass(Review);

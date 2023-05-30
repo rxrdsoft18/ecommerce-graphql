@@ -1,13 +1,18 @@
-import { BadRequestException, Injectable, Logger, NotFoundException } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 
-import { CreateOrderInput } from "./dtos/inputs/create-order.input";
-import { OrderRepository } from "./order.repository";
-import { TokenPayload } from "../auth/interfaces/token-payload.interface";
-import { ShoppingCartService } from "../shopping-cart/shopping-cart.service";
-import { UserService } from "../user/user.service";
-import { ShippingAddressRepository } from "./shipping-address.repository";
-import { ShoppingCart } from "../shopping-cart/schemas";
-import { Types } from "mongoose";
+import { CreateOrderInput } from './dtos/inputs/create-order.input';
+import { OrderRepository } from './order.repository';
+import { TokenPayload } from '../auth/interfaces/token-payload.interface';
+import { ShoppingCartService } from '../shopping-cart/shopping-cart.service';
+import { UserService } from '../user/user.service';
+import { ShippingAddressRepository } from './shipping-address.repository';
+import { ShoppingCart } from '../shopping-cart/schemas';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class OrderService {
@@ -29,6 +34,13 @@ export class OrderService {
     return order;
   }
 
+  async getMyOrderByUserId(userId: string) {
+    return this.orderRepository.find({}).populate({
+      path: 'user',
+      match: { _id: { $eq: userId } },
+    });
+  }
+
   async createOrder(createOrderInput: CreateOrderInput, user: TokenPayload) {
     const { userId, email } = user;
     const { shippingAddress } = createOrderInput;
@@ -46,7 +58,6 @@ export class OrderService {
     console.log(shoppingCart.items);
 
     console.log(this.getShoppingCartItemWithObjectId(shoppingCart));
-
 
     const addressCreated = await this.shippingAddressRepository.create(
       shippingAddress,

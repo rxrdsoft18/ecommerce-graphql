@@ -4,6 +4,9 @@ import { User } from '../../../user/dtos/object-types/user.type';
 @ObjectType()
 export class Review {
   @Field()
+  _id: string;
+
+  @Field()
   reviewerName: string;
 
   @Field()
