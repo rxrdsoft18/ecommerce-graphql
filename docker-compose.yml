@@ -10,5 +10,15 @@ services:
     volumes:
       - ecommerce-data:/data/db
 
+  ecommerce-api:
+    build:
+      context: .
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+
 volumes:
   ecommerce-data:

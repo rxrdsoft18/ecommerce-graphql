@@ -22,8 +22,17 @@ $ cp .env.example .env
 $ yarn install
 ```
 
-## Running the app
+## Running the app with Docker
 
+```bash
+# Run docker
+$ docker compose up -d
+```
+
+## Running the app without Docker
+
+- In the `docker-compose.yml` file comment in the `ecommerce-api` service block
+- in the `.env` file change `mongodb://mongo:27017/ecommerce` to `mongodb://localhost:27017/ecommerce`
 ```bash
 # Run docker
 $ docker compose up -d
@@ -33,4 +42,3 @@ $ docker compose up -d
 $ yarn run start:dev
 
 ```
-
